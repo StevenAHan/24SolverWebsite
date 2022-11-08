@@ -97,8 +97,8 @@ string solver(vector<pair<double,string>>& nums)
 // Main function, directs the user
 int main(int argc, char** argv) 
 {
-    double input[4];
-    for (int i = 1; i < 5; i++) 
+    double input[argc - 2];
+    for (int i = 1; i < argc - 1; i++) 
     {
         input[i - 1] = stod(argv[i]);
     }
@@ -108,10 +108,10 @@ int main(int argc, char** argv)
         toSolve.push_back(make_pair(num, to_string(int(num))));
     }
     string solved = solver(toSolve);
-    cout << (solved == "" ? "There is not a solution" : "There is at least one solution")<< endl;
+    cout << (solved == "" ? "There is not a solution" : "There is at least one solution") << endl;
     if(solved != "")
     {
-        string resp = argv[5];
+        string resp = argv[argc - 1];
         if(resp == "y")
         {
             cout << solved;
