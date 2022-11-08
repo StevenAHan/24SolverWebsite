@@ -7,6 +7,8 @@ Made By: Steven Han
 #include <bits/stdc++.h>
 using namespace std;
 
+string solverEveryPermutation(vector<pair<double,string>>& nums);
+
 // Removes Duplicates in the Solution String
 string duplicateRemover(string& orig)
 {
@@ -44,54 +46,62 @@ string solver(vector<pair<double,string>>& nums)
         string combinations = "";
         for(int i = 0; i < nums.size() - 1; i++)
         {
-            for(int j = i + 1; j < nums.size(); j++)
-            {
-            
+            int j = i + 1;
             vector<pair<double,string>> newNums = nums;
             // +
             newNums[i].first = newNums[i].first + newNums[j].first;
             newNums[i].second = "(" + newNums[i].second + "+" +  newNums[j].second + ")";
             newNums.erase(newNums.begin()+j);
-            combinations += solver(newNums);
+            combinations += solverEveryPermutation(newNums);
 
             // - (l - r)
             newNums = nums;
             newNums[i].first = newNums[i].first - newNums[j].first;
             newNums[i].second = "(" + newNums[i].second + "-" + newNums[j].second + ")";
             newNums.erase(newNums.begin()+j);
-            combinations += solver(newNums);
+            combinations += solverEveryPermutation(newNums);
 
             // *
             newNums = nums;
             newNums[i].first = newNums[i].first * newNums[j].first;
             newNums[i].second = "(" + newNums[i].second + "*" + newNums[j].second + ")";
             newNums.erase(newNums.begin()+j);
-            combinations += solver(newNums);
+            combinations += solverEveryPermutation(newNums);
 
             // / (l / r)
             newNums = nums;
             newNums[i].first = newNums[i].first / newNums[j].first;
             newNums[i].second = "(" + newNums[i].second + "/" + newNums[j].second + ")";
             newNums.erase(newNums.begin()+j);
-            combinations += solver(newNums);
+            combinations += solverEveryPermutation(newNums);
 
             // - (r - l)
             newNums = nums;
             newNums[i].first = newNums[j].first - newNums[i].first;
             newNums[i].second = "(" + newNums[j].second + "-" + newNums[i].second + ")";
             newNums.erase(newNums.begin()+j);
-            combinations += solver(newNums);
+            combinations += solverEveryPermutation(newNums);
 
             // / (r / l)
             newNums = nums;
             newNums[i].first = newNums[j].first + newNums[i].first;
             newNums[i].second = "(" + newNums[j].second + "/" + newNums[i].second + ")";
             newNums.erase(newNums.begin()+j);
-            combinations += solver(newNums);
-            }
+            combinations += solverEveryPermutation(newNums);
         }
         return duplicateRemover(combinations);
     }
+}
+
+string solverEveryPermutation(vector<pair<double,string>>& nums)
+{
+    string ans = "";
+    sort(nums.begin(), nums.end());
+    while (next_permutation(nums.begin(), nums.end()))
+    {
+        ans += solver(nums);
+    }
+    return duplicateRemover(ans);
 }
 
 // Main function, directs the user
@@ -107,7 +117,7 @@ int main(int argc, char** argv)
     {
         toSolve.push_back(make_pair(num, to_string(int(num))));
     }
-    string solved = solver(toSolve);
+    string solved = solverEveryPermutation(toSolve);
     cout << (solved == "" ? "There is not a solution" : "There is at least one solution") << endl;
     if(solved != "")
     {
