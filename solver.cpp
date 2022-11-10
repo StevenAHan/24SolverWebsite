@@ -33,7 +33,7 @@ string duplicateRemover(string& orig)
 // Solves the problem, returning a string of the answers
 string solver(vector<pair<double,string>>& nums) 
 {
-    if(nums[0].first == 24 && nums.size() == 1)
+    if(nums.size() == 1 && nums[0].first > 23.99 && nums[0].first <= 24)
     {
         return (nums[0].second + "\n");
     }
@@ -46,62 +46,63 @@ string solver(vector<pair<double,string>>& nums)
         string combinations = "";
         for(int i = 0; i < nums.size() - 1; i++)
         {
-            int j = i + 1;
-            vector<pair<double,string>> newNums = nums;
-            // +
-            newNums[i].first = newNums[i].first + newNums[j].first;
-            newNums[i].second = "(" + newNums[i].second + "+" +  newNums[j].second + ")";
-            newNums.erase(newNums.begin()+j);
-            combinations += solverEveryPermutation(newNums);
+            for(int j = i + 1; j < nums.size(); j++)
+            {
+                vector<pair<double,string>> newNums = nums;
+                // for(auto num : newNums) { cout << num.first << " ";} cout << endl;
+                // +
+                newNums[i].first = newNums[i].first + newNums[j].first;
+                newNums[i].second = "(" + newNums[i].second + "+" +  newNums[j].second + ")";
+                newNums.erase(newNums.begin()+j);         
+                combinations += solver(newNums);
 
-            // - (l - r)
-            newNums = nums;
-            newNums[i].first = newNums[i].first - newNums[j].first;
-            newNums[i].second = "(" + newNums[i].second + "-" + newNums[j].second + ")";
-            newNums.erase(newNums.begin()+j);
-            combinations += solverEveryPermutation(newNums);
+                // - (l - r)
+                newNums = nums;
+                bool see = false;
+                newNums[i].first = newNums[i].first - newNums[j].first;
+                newNums[i].second = "(" + newNums[i].second + "-" + newNums[j].second + ")";
+                newNums.erase(newNums.begin()+j);
+                combinations += solver(newNums);
 
-            // *
-            newNums = nums;
-            newNums[i].first = newNums[i].first * newNums[j].first;
-            newNums[i].second = "(" + newNums[i].second + "*" + newNums[j].second + ")";
-            newNums.erase(newNums.begin()+j);
-            combinations += solverEveryPermutation(newNums);
+                // *
+                newNums = nums;
+                newNums[i].first = newNums[i].first * newNums[j].first;
+                newNums[i].second = "(" + newNums[i].second + "*" + newNums[j].second + ")";
+                newNums.erase(newNums.begin()+j);
+                combinations += solver(newNums);
 
-            // / (l / r)
-            newNums = nums;
-            newNums[i].first = newNums[i].first / newNums[j].first;
-            newNums[i].second = "(" + newNums[i].second + "/" + newNums[j].second + ")";
-            newNums.erase(newNums.begin()+j);
-            combinations += solverEveryPermutation(newNums);
+                // / (l / r)
+                newNums = nums;
+                if(newNums[j].first != 0)
+                {
+                    newNums[i].first = newNums[i].first / newNums[j].first;
+                    newNums[i].second = "(" + newNums[i].second + "/" + newNums[j].second + ")";
+                    newNums.erase(newNums.begin()+j);
+                    combinations += solver(newNums);
+                }
 
-            // - (r - l)
-            newNums = nums;
-            newNums[i].first = newNums[j].first - newNums[i].first;
-            newNums[i].second = "(" + newNums[j].second + "-" + newNums[i].second + ")";
-            newNums.erase(newNums.begin()+j);
-            combinations += solverEveryPermutation(newNums);
+                // - (r - l)
+                newNums = nums;
+                newNums[i].first = newNums[j].first - newNums[i].first;
+                newNums[i].second = "(" + newNums[j].second + "-" + newNums[i].second + ")";
+                newNums.erase(newNums.begin()+j);
+                combinations += solver(newNums);
 
-            // / (r / l)
-            newNums = nums;
-            newNums[i].first = newNums[j].first + newNums[i].first;
-            newNums[i].second = "(" + newNums[j].second + "/" + newNums[i].second + ")";
-            newNums.erase(newNums.begin()+j);
-            combinations += solverEveryPermutation(newNums);
+                // / (r / l)
+                newNums = nums;
+                see = false;
+                if(newNums[i].first != 0)
+                {
+                    newNums[i].first = newNums[j].first / newNums[i].first;
+                    newNums[i].second = "(" + newNums[j].second + "/" + newNums[i].second + ")";
+                    newNums.erase(newNums.begin()+j);
+                    combinations += solver(newNums);
+                }
+            }
+            
         }
         return duplicateRemover(combinations);
     }
-}
-
-string solverEveryPermutation(vector<pair<double,string>>& nums)
-{
-    string ans = "";
-    sort(nums.begin(), nums.end());
-    while (next_permutation(nums.begin(), nums.end()))
-    {
-        ans += solver(nums);
-    }
-    return duplicateRemover(ans);
 }
 
 // Main function, directs the user
@@ -117,7 +118,7 @@ int main(int argc, char** argv)
     {
         toSolve.push_back(make_pair(num, to_string(int(num))));
     }
-    string solved = solverEveryPermutation(toSolve);
+    string solved = solver(toSolve);
     cout << (solved == "" ? "There is not a solution" : "There is at least one solution") << endl;
     if(solved != "")
     {
