@@ -4,7 +4,10 @@ Description: Solves the 24 Game, where the player is given 4 numbers and must re
             with all 4 of the numbers to get the result of 24.
 Made By: Steven Han
 */
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_set>
 using namespace std;
 
 string solverEveryPermutation(vector<pair<double,string>>& nums);
