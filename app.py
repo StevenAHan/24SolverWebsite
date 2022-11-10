@@ -17,7 +17,7 @@ def home():
     if request.method == "POST":
         numbers = request.form.get("numbers")
         show_ans = request.form.get("show-ans")
-        if(numbers == None or show_ans == None):
+        if(numbers == "" or show_ans == ""):
             flash("Incorrect Inputs")
         to_input = ["./solver"]
         numbers_arr = numbers.split()
