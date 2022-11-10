@@ -26,7 +26,8 @@ def home():
         output = subprocess.run(to_input, stdout = subprocess.PIPE, universal_newlines = True).stdout
         output = output[:-1] # remove endline at the end of output
         outputs = output.split("\n")
-        outputs.insert(1, "Number of Solutions: " + str(len(outputs) - 1))
+        if(str(len(outputs) - 1) > 0):
+            outputs.insert(1, "Number of Solutions: " + str(len(outputs) - 1) + numbers)
         return render_template("index.html", outputs = outputs)
 
     return render_template("index.html", outputs = [""])
