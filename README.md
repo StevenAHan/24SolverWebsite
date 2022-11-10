@@ -1,5 +1,5 @@
 # 24SolverWebsite
-https://twenty-four-game-solver.herokuapp.com/
+https://twenty-four-game-solver.herokuapp.com/. 
 A website that finds all the solutions to a set of numbers in the popular 24 Game, where the objective is to find a way to multiply, add, subtract, and divide all of the numbers in a way to reach 24.
 
 ## How to Use
