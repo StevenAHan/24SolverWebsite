@@ -12,8 +12,12 @@ app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
 # Default route
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def home():
+    return render_template("index.html")
+
+@app.route("/24solver", methods=["GET", "POST"])
+def twenty_four():
     if request.method == "POST":
         numbers = request.form.get("numbers")
         show_ans = request.form.get("show-ans")
@@ -31,7 +35,7 @@ def home():
             outputs.insert(1, "Number of Solution(s): " + str(len(outputs) - 1))
         return render_template("index.html", outputs = outputs)
 
-    return render_template("index.html", outputs = [""])
+    return render_template("twenty_four.html", outputs = [""])
 
     
 if __name__ == "__main__":
